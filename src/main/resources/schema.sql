@@ -1,0 +1,7 @@
+DROP TABLE INVOICE;
+
+CREATE TABLE INVOICE (
+    id IDENTITY,
+    name VARCHAR(200),
+    uuid VARCHAR(200)
+);
