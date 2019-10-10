@@ -2,5 +2,5 @@ package io.github.billsplitter.domain;
 
 import org.springframework.data.repository.CrudRepository;
 
-public interface InvoiceRepository extends CrudRepository<Invoice, Long> {
+public interface BillRepository extends CrudRepository<Bill, Long> {
 }

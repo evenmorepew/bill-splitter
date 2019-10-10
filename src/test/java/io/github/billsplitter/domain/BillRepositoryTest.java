@@ -16,21 +16,21 @@ import static org.junit.Assert.assertThat;
 @RunWith(SpringRunner.class)
 @SpringBootTest(classes = ApplicationConfig.class)
 @AutoConfigureJdbc
-public class InvoiceRepositoryTest {
+public class BillRepositoryTest {
 
     @Autowired
-    private InvoiceRepository invoiceRepository;
+    private BillRepository billRepository;
 
     @Test
     public void save_and_load() {
-        Invoice invoice = Invoice.of("Test", UUID.randomUUID().toString());
-        invoice = invoiceRepository.save(invoice);
+        Bill bill = Bill.of("Test", UUID.randomUUID().toString());
+        bill = billRepository.save(bill);
 
-        invoice = invoice.withName("Test 2");
-        invoiceRepository.save(invoice);
+        bill = bill.withName("Test 2");
+        billRepository.save(bill);
 
-        assertNotNull(invoice.getId());
-        assertThat(invoice.getName(), is("Test 2"));
-        assertThat(invoiceRepository.count(), is(1L));
+        assertNotNull(bill.getId());
+        assertThat(bill.getName(), is("Test 2"));
+        assertThat(billRepository.count(), is(1L));
     }
 }
