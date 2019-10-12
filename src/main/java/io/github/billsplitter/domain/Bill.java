@@ -1,7 +1,12 @@
 package io.github.billsplitter.domain;
 
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
+import lombok.Getter;
 import org.springframework.data.annotation.Id;
 
+@Getter
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 class Bill {
 
     @Id
@@ -13,29 +18,11 @@ class Bill {
         return new Bill(null, name, uuid);
     }
 
-    private Bill(Long id, String name, String uuid) {
-        this.id = id;
-        this.name = name;
-        this.uuid = uuid;
-    }
-
     Bill withName(String name) {
         return new Bill(this.id, name, this.uuid);
     }
 
     Bill withId(Long id) {
         return new Bill(id, this.name, this.uuid);
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public String getUuid() {
-        return uuid;
     }
 }

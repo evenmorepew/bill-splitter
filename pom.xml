@@ -15,6 +15,7 @@
         <spring.boot.version>2.1.9.RELEASE</spring.boot.version>
         <maven-compiler-plugin.version>3.8.1</maven-compiler-plugin.version>
         <h2.version>1.4.199</h2.version>
+        <lombok.version>1.18.10</lombok.version>
     </properties>
 
     <dependencyManagement>
@@ -69,6 +70,14 @@
             <artifactId>h2</artifactId>
             <version>${h2.version}</version>
         </dependency>
+
+        <dependency>
+            <groupId>org.projectlombok</groupId>
+            <artifactId>lombok</artifactId>
+            <version>${lombok.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <build>
