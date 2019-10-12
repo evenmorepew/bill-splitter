@@ -14,7 +14,7 @@ import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = ApplicationConfig.class)
+@SpringBootTest
 @AutoConfigureJdbc
 public class BillRepositoryTest {
 
