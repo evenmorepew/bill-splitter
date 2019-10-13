@@ -1,7 +1,5 @@
 package io.github.billsplitter.domain;
 
-import io.github.billsplitter.rest.BillCreation;
-import io.github.billsplitter.rest.BillRestController;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;

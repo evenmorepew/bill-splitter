@@ -1,6 +1,5 @@
-package io.github.billsplitter.rest;
+package io.github.billsplitter.domain;
 
-import io.github.billsplitter.domain.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PutMapping;

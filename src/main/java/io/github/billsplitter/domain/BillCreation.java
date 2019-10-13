@@ -1,4 +1,4 @@
-package io.github.billsplitter.rest;
+package io.github.billsplitter.domain;
 
 import lombok.*;
 

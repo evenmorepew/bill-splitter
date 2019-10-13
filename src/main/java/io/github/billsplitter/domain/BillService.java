@@ -1,6 +1,5 @@
 package io.github.billsplitter.domain;
 
-import io.github.billsplitter.rest.BillCreation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
