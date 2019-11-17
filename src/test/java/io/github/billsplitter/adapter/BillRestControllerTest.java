@@ -1,5 +1,7 @@
-package io.github.billsplitter.domain;
+package io.github.billsplitter.adapter;
 
+import io.github.billsplitter.domain.BillCreation;
+import io.github.billsplitter.domain.BillService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
