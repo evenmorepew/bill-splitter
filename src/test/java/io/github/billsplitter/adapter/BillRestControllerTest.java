@@ -15,7 +15,7 @@ import java.util.UUID;
 
 import static io.github.billsplitter.JacksonTestUtils.body;
 import static org.mockito.Mockito.when;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -35,8 +35,9 @@ public class BillRestControllerTest {
         BillCreation billCreation = new BillCreation("bill-name");
         when(this.billService.createBill(billCreation)).thenReturn(uuid);
 
-        this.mvc.perform(put("/bill/").content(body(billCreation)).contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isOk()).andExpect(content().string(uuid));
+        this.mvc.perform(post("/bill/").content(body(billCreation)).contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk())
+                .andExpect(content().json(body(new BillDto(billCreation.getName(), uuid))));
     }
 
 }
