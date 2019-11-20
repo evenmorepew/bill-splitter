@@ -1,4 +1,4 @@
-PUT localhost:8080/api/bill
+POST localhost:8080/api/bill
 Content-Type: application/json
 
 {

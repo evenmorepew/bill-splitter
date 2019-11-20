@@ -19,7 +19,7 @@ public class BillRestController {
         this.billService = billService;
     }
 
-    @PutMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
+    @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<BillDto> createBill(@RequestBody BillCreation billCreation) {
         var uuid = billService.createBill(billCreation);
         var body = new BillDto(billCreation.getName(), uuid);
