@@ -1,6 +1,5 @@
 package io.github.billsplitter.adapter;
 
-import io.github.billsplitter.domain.BillCreation;
 import io.github.billsplitter.domain.BillService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -21,7 +20,7 @@ public class BillRestController {
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
     public ResponseEntity<BillDto> createBill(@RequestBody BillCreation billCreation) {
-        var uuid = billService.createBill(billCreation);
+        var uuid = billService.createBill(billCreation.getName());
         var body = new BillDto(billCreation.getName(), uuid);
         return ResponseEntity.ok(body);
     }

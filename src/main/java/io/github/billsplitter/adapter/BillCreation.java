@@ -1,4 +1,4 @@
-package io.github.billsplitter.domain;
+package io.github.billsplitter.adapter;
 
 import lombok.*;
 
@@ -6,8 +6,7 @@ import lombok.*;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class BillCreation {
+class BillCreation {
 
     private String name;
 }

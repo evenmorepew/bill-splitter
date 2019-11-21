@@ -1,6 +1,5 @@
 package io.github.billsplitter.adapter;
 
-import io.github.billsplitter.domain.BillCreation;
 import io.github.billsplitter.domain.BillService;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -33,7 +32,7 @@ public class BillRestControllerTest {
     public void testExample() throws Exception {
         String uuid = UUID.randomUUID().toString();
         BillCreation billCreation = new BillCreation("bill-name");
-        when(this.billService.createBill(billCreation)).thenReturn(uuid);
+        when(this.billService.createBill(billCreation.getName())).thenReturn(uuid);
 
         this.mvc.perform(post("/bill/").content(body(billCreation)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())

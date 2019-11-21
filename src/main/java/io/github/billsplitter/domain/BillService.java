@@ -15,8 +15,8 @@ public class BillService {
         this.repository = repository;
     }
 
-    public String createBill(BillCreation billCreation) {
-        Bill bill = Bill.of(billCreation.getName(), UUID.randomUUID().toString());
+    public String createBill(String name) {
+        Bill bill = Bill.of(name, UUID.randomUUID().toString());
         bill = repository.save(bill);
         return bill.getUuid();
     }
