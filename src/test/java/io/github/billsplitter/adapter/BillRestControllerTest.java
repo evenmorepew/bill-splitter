@@ -1,6 +1,7 @@
 package io.github.billsplitter.adapter;
 
-import io.github.billsplitter.domain.BillService;
+import io.github.billsplitter.domain.BillAddService;
+import io.github.billsplitter.domain.BillAddition;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,17 +27,20 @@ public class BillRestControllerTest {
     private MockMvc mvc;
 
     @MockBean
-    private BillService billService;
+    private BillAddService billAddService;
 
     @Test
     public void testExample() throws Exception {
         String uuid = UUID.randomUUID().toString();
-        BillCreation billCreation = new BillCreation("bill-name");
-        when(this.billService.createBill(billCreation.getName())).thenReturn(uuid);
+        BillAddition billAddition = BillAddition.builder()
+                .name("bill-name")
+                .build();
 
-        this.mvc.perform(post("/bill/").content(body(billCreation)).contentType(MediaType.APPLICATION_JSON))
+        when(this.billAddService.addBill(billAddition)).thenReturn(uuid);
+
+        this.mvc.perform(post("/bill/").content(body(billAddition)).contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(content().json(body(new BillDto(billCreation.getName(), uuid))));
+                .andExpect(content().json(body(new BillDto(billAddition.getName(), uuid))));
     }
 
 }

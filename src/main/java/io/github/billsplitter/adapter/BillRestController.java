@@ -1,7 +1,7 @@
 package io.github.billsplitter.adapter;
 
-import io.github.billsplitter.domain.BillService;
-import org.springframework.beans.factory.annotation.Autowired;
+import io.github.billsplitter.domain.BillAddService;
+import io.github.billsplitter.domain.BillAddition;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -11,17 +11,16 @@ import org.springframework.web.bind.annotation.*;
 @CrossOrigin
 public class BillRestController {
 
-    private final BillService billService;
+    private final BillAddService billAddService;
 
-    @Autowired
-    public BillRestController(BillService billService) {
-        this.billService = billService;
+    public BillRestController(BillAddService billAddService) {
+        this.billAddService = billAddService;
     }
 
     @PostMapping(consumes = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<BillDto> createBill(@RequestBody BillCreation billCreation) {
-        var uuid = billService.createBill(billCreation.getName());
-        var body = new BillDto(billCreation.getName(), uuid);
+    public ResponseEntity<BillDto> addBill(@RequestBody BillAddition billAddition) {
+        var uuid = billAddService.addBill(billAddition);
+        var body = new BillDto(billAddition.getName(), uuid);
         return ResponseEntity.ok(body);
     }
 

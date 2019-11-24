@@ -6,17 +6,17 @@ import org.springframework.stereotype.Service;
 import java.util.UUID;
 
 @Service
-public class BillService {
+public class BillAddService {
 
     private final BillRepository repository;
 
     @Autowired
-    public BillService(BillRepository repository) {
+    public BillAddService(BillRepository repository) {
         this.repository = repository;
     }
 
-    public String createBill(String name) {
-        Bill bill = Bill.of(name, UUID.randomUUID().toString());
+    public String addBill(BillAddition billAddition) {
+        Bill bill = Bill.of(billAddition.getName(), UUID.randomUUID().toString());
         bill = repository.save(bill);
         return bill.getUuid();
     }
