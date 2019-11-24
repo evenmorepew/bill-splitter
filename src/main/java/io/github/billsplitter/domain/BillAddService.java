@@ -16,7 +16,10 @@ public class BillAddService {
     }
 
     public String addBill(BillAddition billAddition) {
-        Bill bill = Bill.of(billAddition.getName(), UUID.randomUUID().toString());
+        Bill bill = Bill.builder()
+                .name(billAddition.getName())
+                .uuid(UUID.randomUUID().toString())
+                .build();
         bill = repository.save(bill);
         return bill.getUuid();
     }

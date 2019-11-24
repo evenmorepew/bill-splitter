@@ -1,18 +1,41 @@
 package io.github.billsplitter.domain;
 
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
+import lombok.Setter;
+import lombok.Singular;
 
-import static lombok.AccessLevel.PACKAGE;
+import javax.persistence.*;
+import javax.validation.constraints.NotNull;
+import java.util.HashSet;
+import java.util.Set;
 
 @Getter
-@AllArgsConstructor(access = PACKAGE)
+@Setter
+@Builder
+@Entity
 public class User {
 
     @Id
-    private final Long id;
-    private final String uuid;
-    private final String name;
-    private final Long billId;
+    @GeneratedValue
+    private Long id;
+
+    @NotNull
+    private String uuid;
+
+    @NotNull
+    private String name;
+
+    @Singular
+    @OneToMany(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "USER_ID", nullable = false, updatable = false)
+    private Set<LineItem> lineItems = new HashSet<>();
+
+    void addUser(LineItem lineItem) {
+        this.lineItems.add(lineItem);
+    }
+
+    void removeUser(LineItem lineItem) {
+        this.lineItems.remove(lineItem);
+    }
 }

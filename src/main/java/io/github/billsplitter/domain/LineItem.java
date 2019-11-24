@@ -1,31 +1,33 @@
 package io.github.billsplitter.domain;
 
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
-import org.springframework.data.annotation.Id;
-import org.springframework.data.relational.core.mapping.Embedded;
+import lombok.Setter;
 
-import java.util.UUID;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.Id;
+import javax.validation.constraints.Digits;
+import javax.validation.constraints.NotNull;
+import java.math.BigDecimal;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PACKAGE)
+@Setter
+@Builder
+@Entity
 public class LineItem {
 
     @Id
-    private final Long id;
-    private final String uuid;
-    private final String description;
-    @Embedded.Empty
-    private final MoneyAmount amount;
-    private final Long userId;
+    @GeneratedValue
+    private Long id;
 
-    static LineItem of(String description, String amount, Long userId) {
-        String uuid = UUID.randomUUID().toString();
-        return new LineItem(null, uuid, description, new MoneyAmount(amount), userId);
-    }
+    @NotNull
+    private String uuid;
 
-    LineItem withId(Long id) {
-        return new LineItem(id, this.uuid, this.description, this.amount, this.userId);
-    }
+    @NotNull
+    private String description;
+
+    @NotNull
+    @Digits(integer = 10, fraction = 2)
+    private BigDecimal amount;
 }
