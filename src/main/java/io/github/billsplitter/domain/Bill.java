@@ -1,17 +1,22 @@
 package io.github.billsplitter.domain;
 
-import java.util.HashSet;
-import java.util.Set;
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 
 class Bill {
 
-    private String name;
+    private final List<User> users;
+    private final List<Expense> expenses;
 
-    private String uuid;
+    private BillStatus currentStatus;
 
-    private Currency currency;
-
-    private Set<User> users = new HashSet<>();
+    Bill() {
+        this.users = new ArrayList<>();
+        this.expenses = new ArrayList<>();
+    }
 
     void addUser(User user) {
         this.users.add(user);
@@ -19,5 +24,33 @@ class Bill {
 
     void removeUser(User user) {
         this.users.remove(user);
+    }
+
+    public int getNumberOfUsers() {
+        return users.size();
+    }
+
+    public void addExpense(Expense expense) {
+        this.expenses.add(expense);
+
+        reCalc();
+    }
+
+    private void reCalc() {
+
+        ExpenseMatrixCreator expenseMatrixCreator = new ExpenseMatrixCreator();
+        BigDecimal[][] matrix = expenseMatrixCreator.createMatrix(users, expenses);
+
+        UserBalanceCalculator userBalanceCalculator = new UserBalanceCalculator();
+        Map<User, BigDecimal> userBalance = userBalanceCalculator.calculateUserBalance(users, matrix);
+
+        PaymentCalculator paymentCalculator = new PaymentCalculator();
+        Collection<Payment> payments = paymentCalculator.calc(userBalance);
+
+        currentStatus = BillStatus.of(payments);
+    }
+
+    public BillStatus getCurrentStatus() {
+        return currentStatus;
     }
 }
