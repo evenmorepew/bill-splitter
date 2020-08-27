@@ -1,23 +1,22 @@
 package io.github.billsplitter.domain;
 
-import java.math.BigDecimal;
-import java.math.RoundingMode;
-import java.util.Arrays;
 import java.util.List;
 
 class ExpenseMatrixCreator {
 
-    BigDecimal[][] createMatrix(List<User> users, List<Expense> expenses) {
+    ExpenseMatrix createMatrix(List<User> users, List<Expense> expenses) {
 
         int size = users.size();
-        BigDecimal[][] recipientToPayer = new BigDecimal[size][size];
-
-        initialiseArray(recipientToPayer);
+        ExpenseMatrix expenseMatrix = new ExpenseMatrix(size);
 
         for (Expense expense : expenses) {
 
-            BigDecimal amount = expense.getAmount();
-            BigDecimal amountPerUser = amount.divide(BigDecimal.valueOf(expense.getInvolvedUsers().size()), RoundingMode.HALF_UP);
+            int numberOfInvolvedUsers = expense.getInvolvedUsers().size();
+
+            MoneyAmount amount = expense.getAmount();
+            MoneyAmount amountPerUser = amount.divide(numberOfInvolvedUsers);
+
+            MoneyAmount rest = amount.subtract(amountPerUser.multiply(numberOfInvolvedUsers));
 
             for (User involvedUser : expense.getInvolvedUsers()) {
 
@@ -28,17 +27,16 @@ class ExpenseMatrixCreator {
                     continue;
                 }
 
-                BigDecimal currentValue = recipientToPayer[recipientIndex][payerIndex];
-                recipientToPayer[recipientIndex][payerIndex] = currentValue.add(amountPerUser);
+                MoneyAmount amountPerUserWithRest = amountPerUser;
+                if (rest.isGreaterZero()) {
+                    amountPerUserWithRest = amountPerUser.add(MoneyAmount.ONE_CENT);
+                    rest = rest.subtract(MoneyAmount.ONE_CENT);
+                }
+
+                expenseMatrix.addAmount(amountPerUserWithRest, recipientIndex, payerIndex);
             }
         }
 
-        return recipientToPayer;
-    }
-
-    private void initialiseArray(BigDecimal[][] recipientToPayer) {
-        for (BigDecimal[] bigDecimals : recipientToPayer) {
-            Arrays.fill(bigDecimals, BigDecimal.ZERO);
-        }
+        return expenseMatrix;
     }
 }

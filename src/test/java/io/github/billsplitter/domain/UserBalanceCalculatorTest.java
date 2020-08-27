@@ -2,12 +2,12 @@ package io.github.billsplitter.domain;
 
 import org.junit.jupiter.api.Test;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
-import static io.github.billsplitter.domain.Identifier.fromString;
+import static io.github.billsplitter.domain.TestdataCreator.createExpense;
+import static io.github.billsplitter.domain.TestdataCreator.createUser;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.core.Is.is;
 
@@ -24,41 +24,26 @@ class UserBalanceCalculatorTest {
         users.add(user3);
 
         List<Expense> expenses = new ArrayList<>();
-        Expense expense1 = createExpense(user1, "LI-1", 10L, List.of(user1, user2));
+        Expense expense1 = createExpense(user1, "LI-1", 10.00, List.of(user1, user2));
         expenses.add(expense1);
-        Expense expense2 = createExpense(user2, "LI-2", 15L, List.of(user1, user2, user3));
+        Expense expense2 = createExpense(user2, "LI-2", 15.00, List.of(user1, user2, user3));
         expenses.add(expense2);
-        Expense expense3 = createExpense(user3, "LI-3", 20L, List.of(user2, user3));
+        Expense expense3 = createExpense(user3, "LI-3", 20.00, List.of(user2, user3));
         expenses.add(expense3);
 
         ExpenseMatrixCreator expenseMatrixCreator = new ExpenseMatrixCreator();
-        BigDecimal[][] matrix = expenseMatrixCreator.createMatrix(users, expenses);
+        ExpenseMatrix matrix = expenseMatrixCreator.createMatrix(users, expenses);
 
         UserBalanceCalculator userBalanceCalculator = new UserBalanceCalculator();
-        Map<User, BigDecimal> userBalance = userBalanceCalculator.calculateUserBalance(users, matrix);
+        Map<User, MoneyAmount> userBalance = userBalanceCalculator.calculateUserBalance(users, matrix);
 
-        BigDecimal balanceUser1 = userBalance.get(user1);
-        assertThat(balanceUser1, is(BigDecimal.ZERO));
+        MoneyAmount balanceUser1 = userBalance.get(user1);
+        assertThat(balanceUser1, is(MoneyAmount.of(0.00)));
 
-        BigDecimal balanceUser2 = userBalance.get(user2);
-        assertThat(balanceUser2, is(BigDecimal.valueOf(-5L)));
+        MoneyAmount balanceUser2 = userBalance.get(user2);
+        assertThat(balanceUser2, is(MoneyAmount.of(-5.00)));
 
-        BigDecimal balanceUser3 = userBalance.get(user3);
-        assertThat(balanceUser3, is(BigDecimal.valueOf(5L)));
-    }
-
-    private User createUser(String s) {
-        return User.builder()
-                .identifier(fromString(s))
-                .build();
-    }
-
-    private Expense createExpense(User payer, String id, long amount, List<User> involvedUsers) {
-        return Expense.builder()
-                .identifier(fromString(id))
-                .amount(BigDecimal.valueOf(amount))
-                .payer(payer)
-                .involvedUsers(involvedUsers)
-                .build();
+        MoneyAmount balanceUser3 = userBalance.get(user3);
+        assertThat(balanceUser3, is(MoneyAmount.of(5.00)));
     }
 }

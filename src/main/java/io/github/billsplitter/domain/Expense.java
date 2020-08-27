@@ -3,7 +3,6 @@ package io.github.billsplitter.domain;
 import lombok.Builder;
 import lombok.Value;
 
-import java.math.BigDecimal;
 import java.util.List;
 
 @Value
@@ -11,7 +10,7 @@ import java.util.List;
 public class Expense {
 
     Identifier identifier;
-    BigDecimal amount;
+    MoneyAmount amount;
     User payer;
     List<User> involvedUsers;
 }

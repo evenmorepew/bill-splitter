@@ -1,6 +1,5 @@
 package io.github.billsplitter.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -9,8 +8,8 @@ import java.util.stream.Collectors;
 
 class PaymentCalculator {
 
-    Collection<Payment> calc(Map<User, BigDecimal> userBalance) {
-        List<Map.Entry<User, BigDecimal>> sortedByValue = userBalance.entrySet().stream()
+    Collection<Payment> calc(Map<User, MoneyAmount> userBalance) {
+        List<Map.Entry<User, MoneyAmount>> sortedByValue = userBalance.entrySet().stream()
                 .sorted(Map.Entry.comparingByValue())
                 .collect(Collectors.toList());
 
@@ -20,10 +19,10 @@ class PaymentCalculator {
         int j = sortedByValue.size() - 1;
         while (i < j) {
 
-            BigDecimal first = sortedByValue.get(i).getValue();
-            BigDecimal last = sortedByValue.get(j).getValue();
+            MoneyAmount first = sortedByValue.get(i).getValue();
+            MoneyAmount last = sortedByValue.get(j).getValue();
 
-            BigDecimal firstAbs = first.abs();
+            MoneyAmount firstAbs = first.abs();
 
             if (firstAbs.compareTo(last) < 0) {
 

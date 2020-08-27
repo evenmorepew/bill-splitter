@@ -1,24 +1,23 @@
 package io.github.billsplitter.domain;
 
-import java.math.BigDecimal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 class UserBalanceCalculator {
 
-    Map<User, BigDecimal> calculateUserBalance(List<User> users, BigDecimal[][] expenseMatrix) {
+    Map<User, MoneyAmount> calculateUserBalance(List<User> users, ExpenseMatrix expenseMatrix) {
 
-        Map<User, BigDecimal> userBalance = new HashMap<>();
+        Map<User, MoneyAmount> userBalance = new HashMap<>();
 
         for (int i = 0; i < users.size(); i++) {
 
-            BigDecimal currentBalance = BigDecimal.ZERO;
+            MoneyAmount currentBalance = MoneyAmount.of(0.00);
 
-            for (int j = 0; j < expenseMatrix.length; j++) {
+            for (int j = 0; j < expenseMatrix.length(); j++) {
 
-                currentBalance = currentBalance.add(expenseMatrix[i][j]);
-                currentBalance = currentBalance.subtract(expenseMatrix[j][i]);
+                currentBalance = currentBalance.add(expenseMatrix.get(i, j));
+                currentBalance = currentBalance.subtract(expenseMatrix.get(j, i));
             }
 
             userBalance.put(users.get(i), currentBalance);

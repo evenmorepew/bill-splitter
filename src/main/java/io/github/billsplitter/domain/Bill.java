@@ -1,6 +1,5 @@
 package io.github.billsplitter.domain;
 
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
@@ -39,10 +38,10 @@ class Bill {
     private void reCalc() {
 
         ExpenseMatrixCreator expenseMatrixCreator = new ExpenseMatrixCreator();
-        BigDecimal[][] matrix = expenseMatrixCreator.createMatrix(users, expenses);
+        ExpenseMatrix matrix = expenseMatrixCreator.createMatrix(users, expenses);
 
         UserBalanceCalculator userBalanceCalculator = new UserBalanceCalculator();
-        Map<User, BigDecimal> userBalance = userBalanceCalculator.calculateUserBalance(users, matrix);
+        Map<User, MoneyAmount> userBalance = userBalanceCalculator.calculateUserBalance(users, matrix);
 
         PaymentCalculator paymentCalculator = new PaymentCalculator();
         Collection<Payment> payments = paymentCalculator.calc(userBalance);
