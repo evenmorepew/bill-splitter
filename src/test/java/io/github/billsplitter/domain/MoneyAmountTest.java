@@ -20,7 +20,7 @@ class MoneyAmountTest {
         MoneyAmount dividend = MoneyAmount.of(10.00);
         MoneyAmount division = dividend.divide(6);
 
-        assertThat(division, is(MoneyAmount.of(1.67)));
+        assertThat(division, is(MoneyAmount.of(1.66)));
     }
 
     @Test
