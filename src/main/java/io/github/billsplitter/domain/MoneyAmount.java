@@ -10,6 +10,7 @@ public class MoneyAmount implements Comparable<MoneyAmount> {
 
     private static final RoundingMode ROUNDING_MODE = RoundingMode.DOWN;
 
+    static final MoneyAmount ZERO = MoneyAmount.of(0.00);
     static final MoneyAmount ONE_CENT = MoneyAmount.of(0.01);
 
     BigDecimal value;

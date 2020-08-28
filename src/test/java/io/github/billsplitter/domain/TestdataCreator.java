@@ -15,9 +15,9 @@ public class TestdataCreator {
                 .build();
     }
 
-    static User createUser(String s) {
+    static User createUser(String id) {
         return User.builder()
-                .identifier(fromString(s))
+                .identifier(fromString(id))
                 .build();
     }
 }

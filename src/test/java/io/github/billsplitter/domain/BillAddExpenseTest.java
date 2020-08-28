@@ -4,9 +4,16 @@ import org.junit.jupiter.api.Test;
 
 import java.util.Collection;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
+import java.util.stream.IntStream;
 
 import static io.github.billsplitter.domain.TestdataCreator.createExpense;
 import static io.github.billsplitter.domain.TestdataCreator.createUser;
+import static java.util.stream.Collectors.groupingBy;
+import static java.util.stream.Collectors.reducing;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.collection.IsIterableContainingInAnyOrder.containsInAnyOrder;
 import static org.hamcrest.core.Is.is;
@@ -243,5 +250,62 @@ public class BillAddExpenseTest {
         MoneyAmount user3Expenditures = expectedPaymentUser3ToUser1.getAmount().add(expectedPaymentUser3ToUser2.getAmount());
 
         assertThat(total, is(user1Expenditures.add(user2Expenditures).add(user3Expenditures)));
+    }
+
+    @Test
+    void multiple_users_and_expenses() {
+
+        Bill bill = new Bill();
+
+        List<User> users = createUsers(5);
+
+        users.forEach(bill::addUser);
+
+        List<Expense> expenses = createExpenses(users, 20, 5.00, 50.00);
+
+        expenses.forEach(bill::addExpense);
+
+        BillStatus billStatus = bill.getCurrentStatus();
+
+        Collection<Payment> payments = billStatus.getPayments();
+
+        MoneyAmount sum = expenses.stream()
+                .map(Expense::getAmount)
+                .reduce(MoneyAmount::add)
+                .orElse(MoneyAmount.ZERO);
+
+        Map<User, MoneyAmount> userToAmountPayed = expenses.stream()
+                .collect(groupingBy(Expense::getPayer,
+                        reducing(MoneyAmount.ZERO, Expense::getAmount, MoneyAmount::add)));
+
+        payments.forEach(p -> pay(p, userToAmountPayed));
+
+        MoneyAmount sumAfterPayments = userToAmountPayed.values()
+                .stream()
+                .reduce(MoneyAmount::add)
+                .orElse(MoneyAmount.ZERO);
+
+        assertThat(sum, is(sumAfterPayments));
+    }
+
+    private void pay(Payment payment, Map<User, MoneyAmount> userToAmountPayed) {
+        userToAmountPayed.compute(payment.getRecipient(), (k, v) -> v == null ? MoneyAmount.ZERO : v.subtract(payment.getAmount()));
+        userToAmountPayed.compute(payment.getIssuer(), (k, v) -> v == null ? payment.getAmount() : v.add(payment.getAmount()));
+    }
+
+    private List<User> createUsers(int numberOfUsers) {
+        return IntStream.range(0, numberOfUsers)
+                .mapToObj(i -> createUser(UUID.randomUUID().toString()))
+                .collect(Collectors.toList());
+    }
+
+    private List<Expense> createExpenses(List<User> users, int numberOfExpenses, double amountFrom, double amountTo) {
+        return IntStream.range(0, numberOfExpenses)
+                .mapToObj(i -> createExpense(
+                        users.get(i % users.size()),
+                        String.format("Expense %d", i),
+                        ThreadLocalRandom.current().nextDouble(amountFrom, amountTo),
+                        users))
+                .collect(Collectors.toList());
     }
 }
