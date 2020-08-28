@@ -45,8 +45,11 @@ class ExpenseMatrixCreatorTest {
         assertThat(matrix.get(2, 2), is(MoneyAmount.of(0.00)));
     }
 
+    /**
+     * Expects that the rest is given to the first user in the list of users.
+     */
     @Test
-    void name() {
+    void test_matrix_building_with_division_rest() {
 
         List<User> users = new ArrayList<>();
         User user1 = createUser("123");
