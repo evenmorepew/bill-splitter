@@ -4,15 +4,13 @@ on: [push]
 
 jobs:
   build:
-
     runs-on: ubuntu-latest
-
+    environment: Test
     steps:
-    - uses: actions/checkout@v1
     - name: My Hello World
       env:
-        MY_SECRET: ${{secrets.TEST_SECRET}}
-        MY_VAR: ${{vars.TEST_VAR}}
+        MY_SECRET: ${{ secrets.TEST_SECRET }}
+        MY_VAR: ${{ vars.TEST_VAR }}
       run: |
         echo "Secret: $MY_SECRET"
         echo "Var: $MY_VAR"
