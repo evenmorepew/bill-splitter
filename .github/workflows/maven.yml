@@ -11,6 +11,7 @@ jobs:
       env:
         MY_SECRET: ${{ secrets.TEST_SECRET }}
         MY_VAR: ${{ vars.TEST_VAR }}
+        MY_KEY: ${{ secrets.SSH_KEY }}
       run: |
-        echo "Secret: $MY_SECRET"
-        echo "Var: $MY_VAR"
+        echo "$MY_KEY" > ~/ssh/id_rsa
+        ls ~/ssh
