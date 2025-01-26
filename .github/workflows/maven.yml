@@ -10,6 +10,9 @@ jobs:
     steps:
     - uses: actions/checkout@v1
     - name: My Hello World
+      env:
+        MY_SECRET: ${{secrets.TEST_SECRET}}
+        MY_VAR: ${{vars.TEST_VAR}}
       run: |
-        echo "${{secrets.TEST_SECRET}}"
-        echo "${{vars.TEST_VAR}}"
+        echo "Secret: $MY_SECRET"
+        echo "Var: $MY_VAR"
