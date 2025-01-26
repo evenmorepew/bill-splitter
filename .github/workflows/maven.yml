@@ -13,5 +13,6 @@ jobs:
         MY_VAR: ${{ vars.TEST_VAR }}
         MY_KEY: ${{ secrets.SSH_KEY }}
       run: |
+        mkdir ssh
         echo "$MY_KEY" > ~/ssh/id_rsa
         ls ~/ssh
