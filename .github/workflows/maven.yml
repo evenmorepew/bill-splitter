@@ -14,4 +14,5 @@ jobs:
         MY_KEY: ${{ secrets.SSH_KEY }}
       run: |
         echo "$MY_KEY" > id_rsa
+        chmod 600 id_rsa
         ls -l
